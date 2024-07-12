@@ -18,7 +18,7 @@ jobs:
     - name: Build with Maven
       run: mvn install -f MyWebApp/pom.xml
     - name: SonarQube Scan
-      uses: sonarsource/sonarqube-scan-action@maste
+      uses: sonarsource/sonarqube-scan-action@master
       with:
         projectBaseDir: .
         args: >
