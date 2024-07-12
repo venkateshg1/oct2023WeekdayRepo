@@ -17,6 +17,7 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
 
     # Check the Quality Gate status.
     - name: SonarQube Quality Gate check
@@ -27,6 +28,7 @@ jobs:
       env:
        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} #OPTIONAL
+       SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
 
     # Optionally you can use the output from the Quality Gate in another step.
     # The possible outputs of the `quality-gate-status` variable are `PASSED`, `WARN` or `FAILED`.
@@ -34,8 +36,9 @@ jobs:
       run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
     
     - name: Check SonarQube Quality Gate status
-      run:
-        STATUS=$(curl -s -u ${{ secrets.SONAR_TOKEN }}:"${{ secrets.SONAR_HOST_URL }})
+      run: |
+        sudo apt-get install -y jq
+        STATUS=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=${{ secrets.SONAR_PROJECT_KEY }}" | jq -r '.projectStatus.status')
         if [ "$STATUS" != "OK" ]; then
           echo "Quality Gate failed"
           exit 1
