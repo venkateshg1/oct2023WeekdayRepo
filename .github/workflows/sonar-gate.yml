@@ -19,6 +19,11 @@ jobs:
       run: mvn install -f MyWebApp/pom.xml
     - name: SonarQube Scan
       uses: sonarsource/sonarqube-scan-action@master
+      with:
+        projectBaseDir: .
+        args: >
+          -Dsonar.organization=my-org
+          -Dsonar.projectKey=my-Java-web-app
       env:
-        SONAR_HOST_URL: http://54.91.190.199:9000
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
