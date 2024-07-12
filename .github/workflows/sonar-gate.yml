@@ -12,6 +12,21 @@ jobs:
         fetch-depth: 0
 
     # Triggering SonarQube analysis as results of it are required by Quality Gate check.
+    - name: Cache SonarQube packages
+      uses: actions/cache@v2
+      with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+
+    - name: Cache SonarQube scanner
+      id: cache-sonar-scanner
+      uses: actions/cache@v2
+      with:
+        path: ~/.sonar/sonar-scanner-4.6.2.2472-linux
+        key: ${{ runner.os }}-sonar-scanner
+        restore-keys: |
+          ${{ runner.os }}-sonar-scanner
+          
     - name: Install SonarQube scanner
       if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
       run: |
