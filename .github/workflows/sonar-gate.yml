@@ -35,7 +35,6 @@ jobs:
     
     - name: Check SonarQube Quality Gate status
       run:
-        sudo apt-get install -y jq
         STATUS=$(curl -s -u ${{ secrets.SONAR_TOKEN }}:"${{ secrets.SONAR_HOST_URL }})
         if [ "$STATUS" != "OK" ]; then
           echo "Quality Gate failed"
